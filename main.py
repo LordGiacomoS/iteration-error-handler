@@ -1,8 +1,6 @@
 import json
 from pathlib import Path
 
-prog_file = 'progress.json'
-
 class Progress:
     def __init__(self, prog_file='progress.json', inp_list=None):
         self.prog_file = prog_file
@@ -54,7 +52,7 @@ class Progress:
         self.save_progress(new_progress)
 
     def work(self, interrupt=None):
-        if Path(prog_file).exists() == False:
+        if Path(self.prog_file).exists() == False:
             self.completed_items = []
             progress = {
                 'completed': [],
@@ -82,75 +80,10 @@ class Progress:
             self.save_progress(new_prog)
             num += 1
 
+prog_file = 'progress.json'
+
 items = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 prog = Progress(prog_file, items)
 prog.reset()
 prog.work(6)
 
-"""
-def work(list, prog_file, interrupt=None):
-    if Path(prog_file).exists() == False:
-
-        completed_items = []
-        progress = {'completed': [], 'to_do': list, 'all': list}
-
-        save_progress(prog_file, progress)
-
-    else:
-        progress = load_progress(prog_file)
-        completed_items = progress['completed']
-        list = progress['all']
-
-    num = 0
-    for item in list:
-        if type(interrupt) == int and interrupt == num:
-            raise Exception('Interruption time')
-
-        print(item)
-        completed_items.append(item)
-        undone = [item for item in item if item not in completed_items]
-        new_prog = {
-            'completed': completed_items,
-            'to_do': undone,
-            'all': items
-        }
-
-        save_progress(prog_file, new_prog)
-        num += 1
-
-def save_progress(prog_file, updated):
-    with open(prog_file, 'w') as f:
-        json.dump(updated, f, indent=2)
-
-def load_progress(prog_file):
-    if Path(prog_file).exists():
-        with open(prog_file) as f:
-            return json.load(f)
-    else:
-        return []
-
-def save_txt(new_lines, file):
-    if Path(file).exists():
-        with open(file) as f:
-            old_lines = f.readlines()
-        all_lines = old_lines + new_lines
-    else:
-        all_lines = new_lines
-
-    with open(file, 'w') as f:
-        f.writelines(all_lines)
-
-def reset(prog_file):
-    progress = load_progress(prog_file)
-    new_progress = {
-        'completed': [],
-        'to_do': progress['all'],
-        'all': progress['all']
-    }
-    save_progress(prog_file, new_progress)
-"""
-
-
-
-#reset(prog_file)
-#work(items, prog_file, interrupt=4)
